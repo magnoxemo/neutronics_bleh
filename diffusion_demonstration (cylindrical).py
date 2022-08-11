@@ -1,4 +1,4 @@
-def diffusion(): 
+def cylindrical_diffusion(): 
     #importing necessary libraries for calculation
     # and ploting  
     import math 
@@ -73,4 +73,4 @@ def diffusion():
 
     plt.show()
 
-diffusion()
+cylindrical_diffusion()
