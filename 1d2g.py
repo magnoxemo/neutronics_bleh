@@ -17,6 +17,9 @@ neu_sigma_f_2=.24
 sigma_a_fuel_1=0.0092144
 sigma_a_fuel_2=0.0778104
 
+sigma_f_fuel_1=0.0092144
+sigma_f_fuel_2=0.0778104
+
 sigma_a_water_1=0.0008996
 sigma_a_water_2=0.0255590
 
@@ -100,7 +103,7 @@ def absorbtion_cross_section(mesh_position,group_number,size_of=0.1):
             return float(sigma_s_fuel_2)
 
 
-def fission_cross_section(mesh_position,group_number,size_of=0.1):
+def neu_fission_cross_section(mesh_position,group_number,size_of=0.1):
 
     if group_number==1:
         if mesh_position< size_of*total_mesh or mesh_position>(1-size_of)*total_mesh:
@@ -127,7 +130,7 @@ def scattering_cross_section(mesh_position,group_number,size_of=0.1):
 
         if mesh_position< size_of*total_mesh or mesh_position>(1-size_of)*total_mesh:
 
-            return float(sca)
+            return float(sigma_a_water_1)
 
         else: 
 
@@ -140,10 +143,10 @@ def scattering_cross_section(mesh_position,group_number,size_of=0.1):
 
         else: 
 
-            return float(sigma_a_fuel_2
+            return float (sigma_a_fuel_2)
 
 
-def create_matrix(group_number):
+def create_matrix_phi(group_number):
 
     total_mesh=int(length/mesh_size) 
     matrix=np.zeros((total_mesh+1,total_mesh+1))
@@ -157,8 +160,8 @@ def create_matrix(group_number):
                 +diffusion_coefficient(i+1,group_number)/mesh_size
                 +((absorbtion_cross_section(i,group_number)
                 +absorbtion_cross_section(i+1,group_number)))*mesh_size/2
-                -(fission_cross_section(i,group_number)
-                +fission_cross_section(i+1,group_number))*mesh_size/2
+                #-(fission_cross_section(i,group_number)
+                #+fission_cross_section(i+1,group_number))*mesh_size/2
                 
                 matrix[i][j-1]=-diffusion_coefficient(i,group_number)/mesh_size
                 matrix[i][j+1]=-diffusion_coefficient(i+1,group_number)/mesh_size
@@ -169,15 +172,15 @@ def create_matrix(group_number):
     +diffusion_coefficient(1+1,group_number)/mesh_size
     (absorbtion_cross_section(1,group_number)
     +absorbtion_cross_section(1+1,group_number))*mesh_size/2
-    -(fission_cross_section(1,group_number)
-    +fission_cross_section(1+1,group_number))*mesh_size/2
+    #-(fission_cross_section(1,group_number)
+    #+fission_cross_section(1+1,group_number))*mesh_size/2
 
     matrix[total_mesh][total_mesh]=diffusion_coefficient(total_mesh+1,group_number)/mesh_size
     +diffusion_coefficient(total_mesh+1+1,group_number)/mesh_size
     +(absorbtion_cross_section(total_mesh+1,group_number)
     +absorbtion_cross_section(total_mesh+1+1,group_number))*mesh_size/2
-    -(fission_cross_section(total_mesh+1,group_number)+
-    fission_cross_section(total_mesh+1+1,group_number))*mesh_size/2
+    #-(fission_cross_section(total_mesh+1,group_number)+
+    #fission_cross_section(total_mesh+1+1,group_number))*mesh_size/2
 
     matrix[total_mesh][total_mesh-1]=-diffusion_coefficient(i,group_number)/mesh_size
 
@@ -186,7 +189,52 @@ def create_matrix(group_number):
     #end of matrix formation 
 
     return matrix
-                            
+
+def create_matrix_neu_f(group_number,cross_section):
+
+    cross_section=cross_section 
+    group_number=group_number
+
+    if cross_section=='neu_F':
+        matrix=np.zeros(total_mesh+1,total_mesh+1)
+
+        for i in range (total_mesh+1):
+            for j in range (total_mesh+1):
+                if i==j:
+                    matrix[i][j]=neu_fission_cross_section(i,group_number)
+
+    if cross_section=="sigma_s":
+        matrix=np.zeros(total_mesh+1,total_mesh+1)
+
+        for i in range (total_mesh+1):
+            for j in range (total_mesh+1):
+                if i==j:
+                    matrix[i][j]=neu_fission_cross_section(i,group_number)
+    
+    return matrix
+
+def create_matrix_sigma_s(group_number,cross_section):
+
+    cross_section=cross_section 
+    group_number=group_number
+
+    if cross_section=='neu_F':
+        matrix=np.zeros(total_mesh+1,total_mesh+1)
+
+        for i in range (total_mesh+1):
+            for j in range (total_mesh+1):
+                if i==j:
+                    matrix[i][j]=scattering_cross_section(i,group_number)
+
+    if cross_section=="sigma_s":
+        matrix=np.zeros(total_mesh+1,total_mesh+1)
+
+        for i in range (total_mesh+1):
+            for j in range (total_mesh+1):
+                if i==j:
+                    matrix[i][j]=scattering_cross_section(i,group_number)
+    
+    return matrix
 
 
 def solver (matrix,constant_vector,epsilon,initial_guess=None,over_relaxation_factor=1.06):
@@ -234,4 +282,3 @@ def solver (matrix,constant_vector,epsilon,initial_guess=None,over_relaxation_fa
         return x1
     else:
         print("solution of this matrix is not available ")
-
