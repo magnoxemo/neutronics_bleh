@@ -143,11 +143,11 @@ def solver (matrix,constant_vector,epsilon,initial_guess=None,over_relaxation_fa
                         sum=sum+matrix[i][j]*x1[j]
                 x2[i]=((b[i]-sum)*omega/matrix[i][i])+(1-omega)*x1[i]
                 x1[i]=x2[i]
-            convergence=abs (x2[2]-c)/x2[2]
-            c=x2[2]
-            print(convergence)
+            convergence=abs (np.linalg.norm(x2)-c)/np.linalg.norm(x2)
+            c=np.linalg.norm(x1)
             if convergence<epsilon:
                 logic=True
+            print(convergence)
             
         print(iteration)
         return x1
