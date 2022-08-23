@@ -246,3 +246,24 @@ def k_solver(k0,phi10,phi20,phi11,phi21,flux1,flux2,fission_flux1,fission_flux2)
 
     return (k-k0)/k
 
+
+    
+c1=create_matrix_phi(1)
+c2=create_matrix_phi(2)
+s12=create_matrix_sigma_s(1)
+s21=create_matrix_sigma_s(2)
+vf1=create_matrix_neu_f(1)
+vf2=(create_matrix_neu_f(2))
+
+k0=1
+
+
+phi1=group_1_solver(k=k0,flux1=c1,fission_flux1=vf1,fission_flux2=vf2,scattering_flux=s21)
+phi2=group_2_solver(c1,c2,s12)
+
+phi10=phi1
+phi20=phi2
+
+convergence=10**-4
+
+a=k_solver(k0,phi1,phi2,phi10,phi20,fission_flux1=vf1,fission_flux2=vf2)
