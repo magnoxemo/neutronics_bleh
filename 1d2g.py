@@ -190,20 +190,12 @@ def create_matrix_phi(group_number):
 
     return matrix
 
-def create_matrix_neu_f(group_number,cross_section):
+def create_matrix_neu_f(group_number,cross_section="neu_F"):
 
     cross_section=cross_section 
     group_number=group_number
 
     if cross_section=='neu_F':
-        matrix=np.zeros(total_mesh+1,total_mesh+1)
-
-        for i in range (total_mesh+1):
-            for j in range (total_mesh+1):
-                if i==j:
-                    matrix[i][j]=neu_fission_cross_section(i,group_number)
-
-    if cross_section=="sigma_s":
         matrix=np.zeros(total_mesh+1,total_mesh+1)
 
         for i in range (total_mesh+1):
@@ -218,14 +210,6 @@ def create_matrix_sigma_s(group_number,cross_section):
     cross_section=cross_section 
     group_number=group_number
 
-    if cross_section=='neu_F':
-        matrix=np.zeros(total_mesh+1,total_mesh+1)
-
-        for i in range (total_mesh+1):
-            for j in range (total_mesh+1):
-                if i==j:
-                    matrix[i][j]=scattering_cross_section(i,group_number)
-
     if cross_section=="sigma_s":
         matrix=np.zeros(total_mesh+1,total_mesh+1)
 
@@ -235,5 +219,30 @@ def create_matrix_sigma_s(group_number,cross_section):
                     matrix[i][j]=scattering_cross_section(i,group_number)
     
     return matrix
+def group_1_solver(k,flux1,flux2,fission_flux1,fission_flux2,scattering_flux):
+    a=np.matmul(fission_flux1,flux1)
+    b=np.matmul(fission_flux2,flux2)
+    c=np.matmul(scattering_flux,flux2)
+    rhs=1/k(a+b)+c
 
-"""have to write a different solver function.i guess sor won't work  """
+    phi1=np.matmul(np.linalg.inv(flux1),rhs)
+
+    return rhs
+
+def group_2_solver(flux1,flux2,scattering_fulx):
+
+    rhs=np.matmul(scattering_fulx,flux1)
+    phi2=np.matmul(np.linalg.inv(flux2),rhs)
+    return phi2
+
+def k_solver(k0,phi10,phi20,phi11,phi21,flux1,flux2,fission_flux1,fission_flux2):
+    x_1=np.matmul(fission_flux1,phi11)
+    y_1=np.matmul(fission_flux2,phi21)
+    x_0=np.matmul(fission_flux1,phi10)
+    y_0=np.matmul(fission_flux2,phi20)
+
+    k=k0*((np.sum(x_1)+np.sum(y_1))/(np.sum(x_0)+np.sum(y_0)))
+    print(k)
+
+    return (k-k0)/k
+
