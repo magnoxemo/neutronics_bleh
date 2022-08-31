@@ -154,7 +154,7 @@ def solver (matrix,constant_vector,epsilon,initial_guess=None,over_relaxation_fa
         m,n=np.shape(matrix)
         
         iteration=0
-        c=0
+        c=np.norm(x1)
         logic=False
 
         while logic==False:
