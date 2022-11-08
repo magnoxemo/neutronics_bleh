@@ -1,3 +1,5 @@
+import random
+import pandas as pd 
 import numpy as np
 import math
 
@@ -61,19 +63,43 @@ Dept of Nuclear Engineering
 University of Dhaka 
 		 
 """
+"""necessary function """
+
+def scatting_cross_section(neutron_energy):
+
+	#there will csv cross section data file from where data will be calculated 
+	
+	pass 
+	return energy
+
+def absorbtion_cross_section(neutron_energy):
+
+	#there will csv cross section data file from where data will be calculated
+	pass 
+	return energy
+	
+def fission_cross_section(neutron_energy):
+
+	#there will csv cross section data file from where data will be calculated
+	pass
+	return energy 
+
+def material_composition():
+
+	pass 
+								
+								"""necessary data loading """
 
 
-"""necessary data loading """
-
-radius_core=3
+radius_core=
 number_of_neutron=10**6
-sigma_a=1
-sigma_f=1
-sigma_s=1
+sigma_a=
+sigma_f=
+sigma_s=
+
 sigma_total=sigma_a+sigma_f+sigma_s 
 inv_sigma_total=1/sigma_total
-
-"""initial position distribution"""
+							      """initial position distribution"""
 							      
 position_matrix=np.zeros((number_of_neutrons,3))
 
@@ -83,36 +109,15 @@ for i in range (number_of_neutrons_):
 	position_matrix[i][2]=np.random.uniform(-np.pi/2,np.pi/2)	  #phi record 
 	
 	
-new_gen_neutron=0 #before the simulation 
 
 for i in range (number_of_neutrons):
 
-    #few things to be fixed before the neutron simulation 
-    
-	alive=True 
-	while (alive):
-        scattering_prob=np.random()
-        if scattering_prob < sigma_s*inv_sigma_total:
-
-            """random parameters generation fro scattering purposes """
-
-            random_parameter=np.random()
-            theta=np.random(-np.pi,np.pi)
-            phi=np.random(-np.pi/2,np.pi/2)
-
-            #distance calculating 
-
-            l= -math.log(1-random_parameter)/total_Sig_t
-
-            """moving  conditions """
-            pass 
-        else :
-            fission_prob=np.random()
-            if fission_prob <sigma_f*inv_sigma_total:
-                """fission conditions and new daughter gen neutron production """
-                alive=False 
-                new_gen_neutron=new_gen_neutron+np.random.choice([1,2,3,4,5])
-                pass 
-            else: 
-                #absorbtion loss
-                alive=False 
+        
+        while alive:
+        
+        	if math.sqrt(x**2+y**2+z**2)<radius_core:
+        		sigma_s=scattering_cross_section()
+        		sigma_f=absorbtion_cross_section()
+        		sigma_f=fission_cross_section()
+        		
+        		reaction_type=random.random(["fission","scattering","absorbtion"]) #need to figure out how to make a bias here 
