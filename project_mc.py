@@ -111,7 +111,8 @@ for i in range (number_of_neutrons_):
 	
 
 for i in range (number_of_neutrons):
-
+	#position_created from the initiation 
+	
         
         while alive:
         
@@ -121,3 +122,17 @@ for i in range (number_of_neutrons):
         		sigma_f=fission_cross_section()
         		
         		reaction_type=random.random(["fission","scattering","absorbtion"]) #need to figure out how to make a bias here 
+			
+			#if it's scattering then have to move the neutron 
+			if scattering_prob < sigma_s*inv_sigma_total:
+				l= -math.log(1-random parameter)/total_Sig_t
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+            			y=y+l*math.sin(phi)*math.sin(theta)
+            			z=z+l*math.cos(phi)
+
+            			x=x+dx
+            			y=y+dy
+            			z=z+dz
