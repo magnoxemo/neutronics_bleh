@@ -121,7 +121,9 @@ for i in range (number_of_neutrons_):
 	
 	
 for j in range(no_gen_sim):
-
+	
+	new_gen_neutron_no=np.zeros(no_gen_sim)
+	
 	for i in range (number_of_neutrons):
 
 		#location copy
@@ -148,7 +150,7 @@ for j in range(no_gen_sim):
 				
 				if reaction_type =="scattering":
 				
-					l= -math.log(1-random parameter)/total_Sig_t
+					l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
 
 					theta=random.uniform(0,360)
 					phi=random.uniform(0,180)
@@ -163,7 +165,7 @@ for j in range(no_gen_sim):
 					
 					reproduction_prob=[1,2,3,4]
 					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
-					new_gen_neutron=new_gen_neutron+new_neutron
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
 					
 					#location has to be saved for new initiation 
 					#there will be a loop to create the same location in a matrix
@@ -197,7 +199,7 @@ for j in range(no_gen_sim):
 				
 			if reaction_type =="scattering":
 				
-				l= -math.log(1-random parameter)/total_Sig_t
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
 
 				theta=random.uniform(0,360)
 				phi=random.uniform(0,180)
@@ -246,7 +248,7 @@ for j in range(no_gen_sim):
 				
 			if reaction_type =="scattering":
 				
-				l= -math.log(1-random parameter)/total_Sig_t
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
 
 				theta=random.uniform(0,360)
 				phi=random.uniform(0,180)
@@ -262,7 +264,7 @@ for j in range(no_gen_sim):
 					
 					reproduction_prob=[1,2,3,4]
 					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
-					new_gen_neutron=new_gen_neutron+new_neutron
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
 					
 					#location has to be saved for new initiation 
 					#there will be a loop to create the same location in a matrix
@@ -277,3 +279,202 @@ for j in range(no_gen_sim):
 					alive=False 
 				else:
 					alive=False 
+					
+			#3rd layer 
+        			 
+        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
+			
+			#that means the neutron is inside the core 
+				
+			sigma_s=scattering_cross_section("core")
+			sigma_f=absorbtion_cross_section("core")
+			sigma_f=fission_cross_section("core")
+				
+			total_sigma=sigma_s+sigma_f+sigma_a
+			
+			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
+				
+				#need to figure out how to make a bias here 
+				
+			if reaction_type =="scattering":
+				
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+		    		y=y+l*math.sin(phi)*math.sin(theta)
+		    		z=z+l*math.cos(phi)
+
+			    	x=x+dx
+			    	y=y+dy
+			    	z=z+dz
+			    	
+				elif reaction_type="fission":
+					
+					reproduction_prob=[1,2,3,4]
+					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
+					
+					#location has to be saved for new initiation 
+					#there will be a loop to create the same location in a matrix
+					#for the same number of neutron 
+					
+					for k in range(new_neutron):
+						r.append(math.sqrt(x**2+y**2+z**2)
+						theta.append("""i have to write the formula """)
+						phi.append("""i have to write the formula """)
+						
+					
+					alive=False 
+				else:
+					alive=False
+			#4th layer 
+        			 
+        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
+			
+			#that means the neutron is inside the core 
+				
+			sigma_s=scattering_cross_section("core")
+			sigma_f=absorbtion_cross_section("core")
+			sigma_f=fission_cross_section("core")
+				
+			total_sigma=sigma_s+sigma_f+sigma_a
+			
+			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
+				
+				#need to figure out how to make a bias here 
+				
+			if reaction_type =="scattering":
+				
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+		    		y=y+l*math.sin(phi)*math.sin(theta)
+		    		z=z+l*math.cos(phi)
+
+			    	x=x+dx
+			    	y=y+dy
+			    	z=z+dz
+			    	
+				elif reaction_type="fission":
+					
+					reproduction_prob=[1,2,3,4]
+					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
+					
+					#location has to be saved for new initiation 
+					#there will be a loop to create the same location in a matrix
+					#for the same number of neutron 
+					
+					for k in range(new_neutron):
+						r.append(math.sqrt(x**2+y**2+z**2)
+						theta.append("""i have to write the formula """)
+						phi.append("""i have to write the formula """)
+						
+					
+					alive=False 
+				else:
+					alive=False
+			#5th layer 
+        			 
+        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
+			
+			#that means the neutron is inside the core 
+				
+			sigma_s=scattering_cross_section("core")
+			sigma_f=absorbtion_cross_section("core")
+			sigma_f=fission_cross_section("core")
+				
+			total_sigma=sigma_s+sigma_f+sigma_a
+			
+			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
+				
+				#need to figure out how to make a bias here 
+				
+			if reaction_type =="scattering":
+				
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+		    		y=y+l*math.sin(phi)*math.sin(theta)
+		    		z=z+l*math.cos(phi)
+
+			    	x=x+dx
+			    	y=y+dy
+			    	z=z+dz
+			    	
+				elif reaction_type="fission":
+					
+					reproduction_prob=[1,2,3,4]
+					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
+					
+					#location has to be saved for new initiation 
+					#there will be a loop to create the same location in a matrix
+					#for the same number of neutron 
+					
+					for k in range(new_neutron):
+						r.append(math.sqrt(x**2+y**2+z**2)
+						theta.append("""i have to write the formula """)
+						phi.append("""i have to write the formula """)
+						
+					
+					alive=False 
+				else:
+					alive=False
+					
+			#6th layer 
+        			 
+        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
+			
+			#that means the neutron is inside the core 
+				
+			sigma_s=scattering_cross_section("core")
+			sigma_f=absorbtion_cross_section("core")
+			sigma_f=fission_cross_section("core")
+				
+			total_sigma=sigma_s+sigma_f+sigma_a
+			
+			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
+				
+				#need to figure out how to make a bias here 
+				
+			if reaction_type =="scattering":
+				
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+		    		y=y+l*math.sin(phi)*math.sin(theta)
+		    		z=z+l*math.cos(phi)
+
+			    	x=x+dx
+			    	y=y+dy
+			    	z=z+dz
+			    	
+				elif reaction_type="fission":
+					
+					reproduction_prob=[1,2,3,4]
+					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
+					
+					#location has to be saved for new initiation 
+					#there will be a loop to create the same location in a matrix
+					#for the same number of neutron 
+					
+					for k in range(new_neutron):
+						r.append(math.sqrt(x**2+y**2+z**2)
+						theta.append("""i have to write the formula """)
+						phi.append("""i have to write the formula """)
+						
+					
+					alive=False 
+				else:
+					alive=False
+              
