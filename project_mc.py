@@ -63,6 +63,40 @@ Dept of Nuclear Engineering
 University of Dhaka 
 		 
 """
+
+class geometry():
+
+    def __init__(self):
+        pass 
+    
+    def add_material(self,material,radius):
+        self.material=material
+        self.radius=radius
+
+    def graph(self,colo):
+        radius=np.array(self.radius)
+        colo=colo
+        circle=[]
+        for i in range (len(radius)):
+            if i==0:
+                logic=True
+            else:
+                logic=False
+            circle.append(plt.Circle((0,0),radius[i],color=colo[i],fill=logic))
+            plt.gca().add_patch(circle[i])
+        plt.axis("scaLed")
+        plt.show()
+
+
+radius=[1,1.1,1.5,1.7,2,2.1]
+material=['u','h2','d20','be02','d2o','ad']
+color=['red','g','blue','pink','blue','green']
+
+sim=geometry()
+sim.add_material(material,r)
+sim.graph(color)
+
+
 """necessary function """
 
 def scatting_cross_section(geometry,neutron_energy=None): 
@@ -95,18 +129,30 @@ def fission_cross_section(geometry,neutron_energy=None):
 	elif geometry =="reflector":
 		return sigma_f_reflector 
 
+def macroscopic_cross_section_data(data_file,density):
+
+    data_file=data_file
+    data_file['cross section']=density* data_file["cross section"]
+    
+    return data_file
+
 def material_composition():
 
 	pass 
 								
 								"""necessary data loading """
 
+data_layer_1_f=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(fission).csv")
+data_layer_1_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(scattering).csv")
+data_layer_1_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(absorption).csv")
+data_layer_2_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(scattering).csv")
+data_layer_2_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(absorption).csv")
 
-radius_core=
-number_of_neutron=10**6
-sigma_a=
-sigma_f=
-sigma_s=
+data_layer_1_f=macroscopic_cross_section_data(data_file=data_layer_1_f,density=density[0])
+data_layer_1_s=macroscopic_cross_section_data(data_file=data_layer_1_s,density=density[0])
+data_layer_1_a=macroscopic_cross_section_data(data_file=data_layer_1_a,density=density[0])
+data_layer_2_s=macroscopic_cross_section_data(data_file=data_layer_2_s,density=density[1])
+data_layer_2_a=macroscopic_cross_section_data(data_file=data_layer_2_a,density=density[1])
 
 sigma_total=sigma_a+sigma_f+sigma_s 
 inv_sigma_total=1/sigma_total
