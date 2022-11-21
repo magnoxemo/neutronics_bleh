@@ -9,52 +9,6 @@ this code will solve the eigenvalues which will be computed using the formula
 
 					keff=(number of neutrons in i+1 gen)/ ( number of neutrons in i th gen)  
 					
-As I am doing this for a single group of neutrons no maxwell boltzman energy distribution is needed.
-
-##################################################################################################################################################################
-
-steps:
-
-1.random samplaing the location of initial position of neutron and moving it, saving those location.
-						
-						#################    moving calculation   ##################
-						
-						from point A ------> point B
-moving will happen spherical co ordinates.so (R_a,theta_a,phi_a)--------> (R_b,theta_b,phi_b).
-						
-we will be using spherical co ordinates [r,theta,phi]
-
-2.Distance travel will happen using this formula 
-
-					l= -math.log(1-random parameter)/total_Sig_t
-				
-
-and then random values for						  
-						  
-						   theta ->[-pi,+pi]
-						   phi   ->[-pi/2,+pi/2]
-			
-3.check for the probability for each possible type of cases.
-
-				a) new neutron will generate if fission happens 
-					
-					subcases:
-						[i]    neutron alive=False 
-						[ii]   randomly the number of the promt neutron will be counted from the guess 
-							guess->[1,2,3,4].and there will be probability bias 
-						[iii]  have to save the location of new born neutron for next gen calculation 
-						[iv]   keep count the number of the prompt neutron 
-						
-						
-				b)direction will alter if scattering happens 
-				c)neutron will alive=False if absorbtion happens  
-				d)leakage alive =False 
-				
-4.repeat those process for the all nth gen neutron 
-5.calculate eigenvalue 
-6.show it in a graph with respect with gen which will give a competetive understanding if the reactor is critical or not. 
-
-
 #######################################################################################################################################################################
 copy right :
 
@@ -113,20 +67,29 @@ def absorbtion_cross_section(geometry,neutron_energy=None):
 
 	#there will csv cross section data file from where data will be calculated
 	if geometry =="core":
+	#will call the interpolated function
 		return sigma_a_core
-	elif geometry =="water"
+	elif geometry =="water":
+	#will call the interpolated function
 		return sigma_a_water
 	elif geometry =="reflector":
+	#will call the interpolated function
 		return sigma_a_reflector
 	
 def fission_cross_section(geometry,neutron_energy=None):
 
 	#there will csv cross section data file from where data will be calculated
 	if geometry =="core":
+	#will call the interpolated function 
+	
 		return sigma_f_core
-	elif geometry =="water"
+		
+	elif geometry =="water":
+	#will call the interpolated function
 		return sigma_f_water
+		
 	elif geometry =="reflector":
+	#will call the interpolated function
 		return sigma_f_reflector 
 
 def macroscopic_cross_section_data(data_file,density):
@@ -139,20 +102,25 @@ def macroscopic_cross_section_data(data_file,density):
 def material_composition():
 
 	pass 
+	
+def energy_updater(Energy):
+
+    del_E=np.random.uniform(0,(1-alpha)*Engergy)
+    Engergy=Engergy-del_E
+    return Engergy
 								
 								"""necessary data loading """
 
-data_layer_1_f=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(fission).csv")
-data_layer_1_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(scattering).csv")
-data_layer_1_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(absorption).csv")
-data_layer_2_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(scattering).csv")
-data_layer_2_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(absorption).csv")
+u_f=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(fission).csv")
+u_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(scattering).csv")
+u_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/U-235(absorption).csv")
+H_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(scattering).csv")
+H_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/H-1(absorption).csv")
+Be_a=pd.read_csv("/home/ibne_walid/Documents/csv data file/Cross section data for berilium_scattering_and absorption.csv")
+D_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/Cross section data for Deuterium_scattering.csv")
+O_s=pd.read_csv("/home/ibne_walid/Documents/csv data file/Cross section data for oxygen_scattering_and absorption.csv")
 
-data_layer_1_f=macroscopic_cross_section_data(data_file=data_layer_1_f,density=density[0])
-data_layer_1_s=macroscopic_cross_section_data(data_file=data_layer_1_s,density=density[0])
-data_layer_1_a=macroscopic_cross_section_data(data_file=data_layer_1_a,density=density[0])
-data_layer_2_s=macroscopic_cross_section_data(data_file=data_layer_2_s,density=density[1])
-data_layer_2_a=macroscopic_cross_section_data(data_file=data_layer_2_a,density=density[1])
+
 
 sigma_total=sigma_a+sigma_f+sigma_s 
 inv_sigma_total=1/sigma_total
@@ -171,7 +139,9 @@ for j in range(no_gen_sim):
 	new_gen_neutron_no=np.zeros(no_gen_sim)
 	
 	for i in range (number_of_neutrons):
-
+	        
+	        Engergy= #something 
+	        
 		#location copy
 		x=position_matrix[i][0]*math.sin(phi)*math.cos(position_matrix[i][1])
 		y=position_matrix[i][0]*math.sin(position_matrix[i][2])*math.sin(position_matrix[i][1])
@@ -184,9 +154,9 @@ for j in range(no_gen_sim):
 			
 			#that means the neutron is inside the core 
 				
-				sigma_s=scattering_cross_section("core")
-				sigma_f=absorbtion_cross_section("core")
-				sigma_f=fission_cross_section("core")
+				sigma_s=scattering_cross_section("core",Energy=Engergy)
+				sigma_f=absorbtion_cross_section("core",Energy=Engergy)
+				sigma_f=fission_cross_section("core",Energy=Engergy)
 				
 				total_sigma=sigma_s+sigma_f+sigma_a
 				
@@ -207,6 +177,9 @@ for j in range(no_gen_sim):
 			    		x=x+dx
 			    		y=y+dy
 			    		z=z+dz
+			    		
+			    		Engergy =energy_updater(Energy)
+			    		
 				elif reaction_type="fission":
 					
 					reproduction_prob=[1,2,3,4]
@@ -227,21 +200,21 @@ for j in range(no_gen_sim):
 				else:
 					alive=False 
         		
-        		#first layer 
+        		#2nd layer 
         			 
         		if math.sqrt(x**2+y**2+z**2)>radius_core and math.sqrt(x**2+y**2+z**2) <radius_clad:
 			
-			#that means the neutron is inside the core 
+			#that means the neutron is outside of the core and in the 2nd layer  
 				
-			sigma_s=scattering_cross_section("core")
-			sigma_f=absorbtion_cross_section("core")
-			sigma_f=fission_cross_section("core")
+			sigma_s=scattering_cross_section("clad",Energy=Engergy)
+			sigma_f=absorbtion_cross_section("clad",Energy=Engergy)
+			sigma_f=fission_cross_section("clad",Energy=Engergy)
 				
 			total_sigma=sigma_s+sigma_f+sigma_a
 			
 			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
 				
-				#need to figure out how to make a bias here 
+				#need to figure out how to make a bias here----> done  
 				
 			if reaction_type =="scattering":
 				
@@ -256,6 +229,8 @@ for j in range(no_gen_sim):
 			    	x=x+dx
 			    	y=y+dy
 			    	z=z+dz
+			    	
+			    	Engergy =energy_updater(Energy)
 			    	
 				elif reaction_type="fission":
 					
@@ -282,9 +257,9 @@ for j in range(no_gen_sim):
 			
 			#that means the neutron is inside the core 
 				
-			sigma_s=scattering_cross_section("core")
-			sigma_f=absorbtion_cross_section("core")
-			sigma_f=fission_cross_section("core")
+			sigma_s=scattering_cross_section("clad2",Energy=Engergy)
+			sigma_f=absorbtion_cross_section("clad2",Energy=Engergy)
+			sigma_f=fission_cross_section("clad2",Energy=Engergy)
 				
 			total_sigma=sigma_s+sigma_f+sigma_a
 			
@@ -305,6 +280,8 @@ for j in range(no_gen_sim):
 			    	x=x+dx
 			    	y=y+dy
 			    	z=z+dz
+			    	
+			    	Engergy =energy_updater(Energy)
 			    	
 				elif reaction_type="fission":
 					
@@ -332,9 +309,61 @@ for j in range(no_gen_sim):
 			
 			#that means the neutron is inside the core 
 				
-			sigma_s=scattering_cross_section("core")
-			sigma_f=absorbtion_cross_section("core")
-			sigma_f=fission_cross_section("core")
+			sigma_s=scattering_cross_section("core",Energy=Engergy)
+			sigma_f=absorbtion_cross_section("core",Energy=Engergy)
+			sigma_f=fission_cross_section("core",Energy=Engergy)
+				
+			total_sigma=sigma_s+sigma_f+sigma_a
+			
+			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
+				
+				#need to figure out how to make a bias here 
+				
+			if reaction_type =="scattering":
+				
+				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")+scatting_cross_section("scattering"))
+
+				theta=random.uniform(0,360)
+				phi=random.uniform(0,180)
+				x=x+l*math.sin(phi)*math.cos(theta)
+		    		y=y+l*math.sin(phi)*math.sin(theta)
+		    		z=z+l*math.cos(phi)
+
+			    	x=x+dx
+			    	y=y+dy
+			    	z=z+dz
+			    	
+			    	Engergy =energy_updater(Energy)
+			    	
+			elif reaction_type="fission":
+			
+					
+					reproduction_prob=[1,2,3,4]
+					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
+					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
+					
+					#location has to be saved for new initiation 
+					#there will be a loop to create the same location in a matrix
+					#for the same number of neutron 
+					
+					for k in range(new_neutron):
+						r.append(math.sqrt(x**2+y**2+z**2)
+						theta.append("""i have to write the formula """)
+						phi.append("""i have to write the formula """)
+						
+					
+					alive=False 
+			else:
+					alive=False
+			#4th layer 
+        			 
+        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
+			
+			#that means the neutron is inside the core 
+				
+			sigma_s=scattering_cross_section("core",Energy=Engergy)
+			sigma_f=absorbtion_cross_section("core",Energy=Engergy)
+			sigma_f=fission_cross_section("core",Energy=Engergy)
 				
 			total_sigma=sigma_s+sigma_f+sigma_a
 			
@@ -356,54 +385,7 @@ for j in range(no_gen_sim):
 			    	y=y+dy
 			    	z=z+dz
 			    	
-				elif reaction_type="fission":
-					
-					reproduction_prob=[1,2,3,4]
-					new_neutron=np.random.choice(reproduction_prob,p=[0.1,0.4,0.4,0.1])
-					new_gen_neutron[j]=new_gen_neutron[j]+new_neutron
-					
-					#location has to be saved for new initiation 
-					#there will be a loop to create the same location in a matrix
-					#for the same number of neutron 
-					
-					for k in range(new_neutron):
-						r.append(math.sqrt(x**2+y**2+z**2)
-						theta.append("""i have to write the formula """)
-						phi.append("""i have to write the formula """)
-						
-					
-					alive=False 
-				else:
-					alive=False
-			#4th layer 
-        			 
-        		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
-			
-			#that means the neutron is inside the core 
-				
-			sigma_s=scattering_cross_section("core")
-			sigma_f=absorbtion_cross_section("core")
-			sigma_f=fission_cross_section("core")
-				
-			total_sigma=sigma_s+sigma_f+sigma_a
-			
-			reaction_type=np.random.choice(["fission","scattering","absorbtion"],p=[sigma_f/total_sigma,sigma_s/total_sigma,sigma_a/total_sigma)
-				
-				#need to figure out how to make a bias here 
-				
-			if reaction_type =="scattering":
-				
-				l= -math.log(1-random parameter)/(scatting_cross_section("scattering")+scatting_cross_section("scattering")	+scatting_cross_section("scattering"))
-
-				theta=random.uniform(0,360)
-				phi=random.uniform(0,180)
-				x=x+l*math.sin(phi)*math.cos(theta)
-		    		y=y+l*math.sin(phi)*math.sin(theta)
-		    		z=z+l*math.cos(phi)
-
-			    	x=x+dx
-			    	y=y+dy
-			    	z=z+dz
+			    	Engergy =energy_updater(Energy)
 			    	
 				elif reaction_type="fission":
 					
@@ -427,7 +409,7 @@ for j in range(no_gen_sim):
 			#5th layer 
         			 
         		if math.sqrt(x**2+y**2+z**2)>radius_clad and math.sqrt(x**2+y**2+z**2) <radius_clad2:
-			
+			 
 			#that means the neutron is inside the core 
 				
 			sigma_s=scattering_cross_section("core")
@@ -453,6 +435,8 @@ for j in range(no_gen_sim):
 			    	x=x+dx
 			    	y=y+dy
 			    	z=z+dz
+			    			
+			    	Engergy =energy_updater(Energy)
 			    	
 				elif reaction_type="fission":
 					
@@ -480,9 +464,9 @@ for j in range(no_gen_sim):
 			
 			#that means the neutron is inside the core 
 				
-			sigma_s=scattering_cross_section("core")
-			sigma_f=absorbtion_cross_section("core")
-			sigma_f=fission_cross_section("core")
+			sigma_s=scattering_cross_section("core",Energy=Engergy)
+			sigma_f=absorbtion_cross_section("core",Energy=Engergy)
+			sigma_f=fission_cross_section("core",Energy=Engergy)
 				
 			total_sigma=sigma_s+sigma_f+sigma_a
 			
@@ -504,6 +488,8 @@ for j in range(no_gen_sim):
 			    	y=y+dy
 			    	z=z+dz
 			    	
+			    	Engergy =energy_updater(Energy)
+			    	
 				elif reaction_type="fission":
 					
 					reproduction_prob=[1,2,3,4]
@@ -524,3 +510,4 @@ for j in range(no_gen_sim):
 				else:
 					alive=False
               
+
