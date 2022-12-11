@@ -479,3 +479,11 @@ for j in range(no_gen_sim):
 	k_eff[j]=new_gen_neutron[j]/number_of_neutrons
 	print("from------------- ", number_of_neutrons ," -------to------ ",new_gen_neutron[j],"are produced--------------- ",k_eff[j] )
 	number_of_neutrons=int(new_gen_neutron[j])
+	
+"""
+copy right :
+Ebny Walid Ahammed 
+Dept of Nuclear Engineering 
+University of Dhaka 
+		 
+"""
