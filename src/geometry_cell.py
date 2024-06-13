@@ -1,13 +1,22 @@
+
 class Zcylinder():
     
     def __init__(self,x0:float,y0:float,radius:float):
         self.x0=x0
         self.y0=y0
         self.r=radius
+        self.tolerance=10**-6
         
     def particle_position_confirm(self,x,y,z):        
         val=(x-self.x0)**2+(y-self.y0)**2-self.r**2
         return val
+
+    def surface_grad(self,x,y,z):
+        if abs(self.particle_position_confirm(x,y,z))<tolerance:
+            grad=[2*(x-self.x0),2*(y-self.y0),0]
+            return grad
+        else:
+            raise ValueError ("co ordinate isn't on the surface!")
 
 
 class  Cell():
@@ -51,8 +60,9 @@ class  Cell():
         after reading the generated number 
         """
         if generated_id_number==self.cell_id_number:
-            
-            print("particle found in this cell ")      
+            print("particle is found in this cell ") 
             return 1
+
         else:
+            print("particle is not found in this cell ") 
             return 0
