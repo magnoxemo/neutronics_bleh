@@ -1,4 +1,5 @@
-
+import numpy as np
+from math import *
 class Zcylinder():
     
     def __init__(self,x0:float,y0:float,radius:float):
@@ -11,12 +12,14 @@ class Zcylinder():
         val=(x-self.x0)**2+(y-self.y0)**2-self.r**2
         return val
 
-    def surface_grad(self,x,y,z):
-        if abs(self.particle_position_confirm(x,y,z))<tolerance:
-            grad=[2*(x-self.x0),2*(y-self.y0),0]
-            return grad
+    def surface_normal(self,x,y):
+
+        if abs((x-self.x0)**2+(y-self.y0)**2+-self.radius**2)<self.tolarence:
+            
+            normal= [2*(x-self.x0),2*(y-self.y0)]
+            return np.array(normal)/np.linalg.norm(normal)
         else:
-            raise ValueError ("co ordinate isn't on the surface!")
+            raise ValueError("Point is not on the surface " + str(self.id))
 
 
 class  Cell():
